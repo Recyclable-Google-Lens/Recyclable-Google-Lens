@@ -1,0 +1,48 @@
+<style>
+  h1.increase {
+    font-size: 80px;
+  }
+</style>
+<div style="text-align: center;">
+  <h1 class="increase">Recyclable Google Lens</h1>
+  <p style="font-size: 25px;">
+    Want to know what is a eco-friendly alternative of your daily use product?
+    Click on open camera button to find out
+  </p>
+</div>
+
+<ng-container [ngSwitch]="camera.state$ | async">
+  <ng-container *ngSwitchCase="CameraState.Stale">
+    <button (click)="camera.requestAccess()">
+      Open camera
+    </button>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="CameraState.AccessDenied">
+    <p [@fadeInOut]>Cannot access camera...😞</p>
+  </ng-container>
+
+  <ng-container *ngSwitchDefault>
+    <video
+      #video
+      autoplay
+      height="240"
+      id="videoElement"
+      playsinline
+      [srcObject]="camera.mediaStream$ | async"
+      width="320"
+    ></video>
+
+    <button (click)="detect()">Detect</button>
+
+    <p *ngIf="prediction$ | async as prediction" [@fadeInOut]>
+      {{ prediction }}
+    </p>
+
+    <button *ngIf="showButton$" (click)="goToLink()">Redirect</button>
+  </ng-container>
+</ng-container>
+<div>
+  <p style="font-size: 20px;">Made by :</p>
+  <p style="font-size: 20px;">Radhika Saini, Srijan Singh and Aditya Pandey</p>
+</div>
